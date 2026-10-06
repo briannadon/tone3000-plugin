@@ -12,7 +12,8 @@
 //    latency it reports to the host is half of it plus 1 ms. Attacks always
 //    pass in a few ms whatever the buffer.
 //  - Mix: the dry/shifted blend, 0-100% shifted (the default is 100). Lower
-//    it to mix the dry signal back in.
+//    it to mix the dry signal back in; the dry is held by the floor, the
+//    same alignment the tonality band uses, so it lands with the attacks.
 // Plain controls, no power switches, same footprint as the gate deck plus
 // Mix's column so the two read as one family.
 #pragma once

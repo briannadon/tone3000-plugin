@@ -56,8 +56,11 @@
  * PitchShift is a bit-exact, zero-latency passthrough (the "fresh default
  * chain is transparent" invariant in processor_tests). The deck's Mix sets
  * the shifted signal's share of the output (the same dry/wet blend as a
- * block's Mix, at 1 by default), multiplied into the power fade so a
- * power-off still lands on the untouched input. A Window change
+ * block's Mix, at 1 by default), inside the power fade so a power-off still
+ * lands on the untouched input. The dry it blends in is the input held by
+ * the floor, the same alignment the tonality band uses, so a partial Mix
+ * lands the dry with the re-synced attacks rather than leading the shift by
+ * the tap's drift. A Window change
  * keeps the rings (they are sized for the largest window) and lets a tap
  * outside the new range splice back in like any drift splice.
  *
@@ -110,9 +113,9 @@ public:
     // Frequency above which the dry bypasses the shifter. 0: off.
     float tonalityHz = 0.0f;
     Window window = kDefaultWindow;
-    // Dry/wet balance of the output: 0 is the untouched input, 1 the pure
-    // shift (the default). In between mixes the dry signal with the shifted
-    // one.
+    // Dry/wet balance of the output: 0 is the input held by the floor (the
+    // same alignment the tonality band uses), 1 the pure shift (the
+    // default). In between mixes the dry signal with the shifted one.
     float mix = 1.0f;
   };
 

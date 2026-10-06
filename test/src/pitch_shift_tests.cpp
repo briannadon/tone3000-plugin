@@ -10,7 +10,8 @@
 //                   at ±1 and ±2 octaves and at a fractional shift; a splice
 //                   between uncorrelated taps holds the level; the tonality
 //                   limit passes the highs unshifted; Mix blends the dry
-//                   signal back in (0 = transparent); a pick attack re-syncs
+//                   signal back in (0 = the input held by the floor); a pick
+//                   attack re-syncs
 //                   the tap to the floor; stereo channels share one tap; a
 //                   mono buffer against the stereo engine is safe; rate /
 //                   block-size / window changes and ±24 extremes stay
@@ -221,9 +222,9 @@ TEST(PitchShiftTest, TonalityLimitPassesTheHighsUnshifted) {
 
 TEST(PitchShiftTest, MixBlendsTheDryBackIn) {
   // Half Mix: an octave down carries the note and its octave at the same
-  // level. Mix 0 is the untouched input (the shifted engine term drops out
-  // entirely), so a fully dry shifter is transparent however the power is
-  // set.
+  // level. The dry is held by the floor so a partial Mix lands it with the
+  // re-synced attacks: Mix 0 is the input at the floor delay, not the
+  // untouched input.
   const auto in = makeSine(3 * 48000, 440.0, 0.5f);
   PitchShift::Params p;
   p.semitones = -12;
@@ -235,7 +236,9 @@ TEST(PitchShiftTest, MixBlendsTheDryBackIn) {
   EXPECT_NEAR(atDry, atOctave, 1.0);
   p.mix = 0.0f;
   const auto dry = runPitchShift(in, p);
-  for (size_t i = 48000; i < dry.size(); ++i) ASSERT_FLOAT_EQ(dry[i], in[i]) << i;
+  const int floor = PitchShift::minDelaySamples(kFs);
+  for (size_t i = kSettle; i < dry.size(); ++i)
+    ASSERT_FLOAT_EQ(dry[i], in[i - static_cast<size_t>(floor)]) << i;
 }
 
 TEST(PitchShiftTest, PickAttackReSyncsTheTapToTheFloor) {

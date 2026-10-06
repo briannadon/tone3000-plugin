@@ -255,7 +255,8 @@ flowchart LR
   delay buffer, 20 / 30 / 40 / 60 ms; the tap's delay sweeps between a 2 ms
   floor and the buffer end, so the latency reported to the host is the
   midpoint, 11 / 16 / 21 / 31 ms) and Mix (the dry/shifted blend, 100% by
-  default; lower it to mix the dry signal back in). Power, Buffer, Tonality
+  default; lower it to mix the dry signal back in, held by the floor so it
+  lands with the attacks). Power, Buffer, Tonality
   and Mix changes blend over 25 ms like the stereo image's, never click. The
   engine is a time-domain correlation-spliced delay line with onset re-sync,
   so pick attacks pass in a few ms whatever the buffer; the buffer sets the

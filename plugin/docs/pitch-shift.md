@@ -468,9 +468,12 @@ bass note's period does not fit it.
   told the midpoint, (2 + N) / 2 = 11 / 16 / 21 / 31 ms.
 - **Mix**, the dry/shifted blend, 0-100% shifted. 100 (the default) is the
   pure shift; lower it to mix the dry signal back in. It scales the shifted
-  term against the dry (a linear crossfade, like a block's Mix) and
-  multiplies into the power fade, so a powered-off shifter still lands on
-  the untouched input.
+  term against the dry (a linear crossfade, like a block's Mix) and blends
+  inside the power fade, so a powered-off shifter still lands on the
+  untouched input. The dry it blends in is held by the floor (the same
+  alignment the tonality band uses), so it lands with the re-synced attacks
+  instead of leading the shift by the tap's drift; at 0 the output is the
+  input at the floor delay.
 
 A smooth sweep asks the engine for a new ratio every block. A pending lag
 search is planned for a drift, so a same-direction change of up to 0.1 in
